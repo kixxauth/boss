@@ -37,6 +37,12 @@ tests.push(function (next) {
     next();
 });
 
+// Setup 3 branches:
+// The first throws an error, the second passes an error to next(),
+// and the last passes it to next in a future turn of the event loop.
+//
+// In each branch, the last functin in the chain is not called, but
+// the error is always passed through to the callback.
 tests.push(function (next) {
     var throwErrBranch = []
       , syncErrBranch = []
@@ -64,6 +70,9 @@ tests.push(function (next) {
     syncErrBranch.push(lastOne);
     asyncErrBranch.push(lastOne);
 
+    // The callback of each branch is passed the error thrown by the branch.
+    // Notice also that `this` is passed through each of the branches by passing
+    // it into the createStack() function as the context object.
     BO.createStack(throwErrBranch, this)(function (err) {
         this.count ++;
         strictEqual(err, 'THROWN ERROR', 'thrown error')

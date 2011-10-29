@@ -17,9 +17,17 @@ tests.push(function (next) {
 
     BO.createMap(fns, {})(function (err, result) {
         strictEqual(inside, 1, 'inside count is 1');
-        strictEqual(result.foo, 'bar', 'result.foo is bar');
+        strictEqual(result.foo, 'bar', 'result.foo is "bar"');
         outside.count ++;
     });
+});
+
+tests.push(function (next) {
+    function once(emit) {
+    }
+
+    function twice(emit) {
+    }
 });
 
 var stack = BO.createStack(tests, testContext);
