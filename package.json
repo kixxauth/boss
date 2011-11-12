@@ -1,0 +1,5 @@
+{
+"name": "boss",
+"version": "0.1.0",
+"description": "Boss provides a task queue constructor which runs asynchronous functions in serial."
+}
