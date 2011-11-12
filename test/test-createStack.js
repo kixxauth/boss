@@ -1,4 +1,4 @@
-var BO = require('../index')
+var STK = require('../stack')
 
 var testContext = {count: 0};
 var tests = [];
@@ -78,17 +78,17 @@ tests.push(function (next) {
     // The callback of each branch is passed the error thrown by the branch.
     // Notice also that `this` is passed through each of the branches by passing
     // it into the createStack() function as the context object.
-    BO.createStack(throwErrBranch, this)(function (err) {
+    STK.createStack(throwErrBranch, this)(function (err) {
         this.count ++;
         strictEqual(err, 'THROWN ERROR', 'thrown error')
         printTest('Thrown Error');
 
-        BO.createStack(syncErrBranch, this)(function (err) {
+        STK.createStack(syncErrBranch, this)(function (err) {
             this.count ++;
             strictEqual(err, 'SYNC ERROR', 'sync error')
             printTest('Sync Error');
 
-            BO.createStack(asyncErrBranch, this)(function (err) {
+            STK.createStack(asyncErrBranch, this)(function (err) {
                 this.count ++;
                 strictEqual(err, 'ASYNC ERROR', 'async error')
                 printTest('Async Error');
@@ -99,7 +99,7 @@ tests.push(function (next) {
     });
 });
 
-var stack = BO.createStack(tests, testContext);
+var stack = STK.createStack(tests, testContext);
 
 stack(function (err) {
     strictEqual(err, undefined, 'Final err is undefined');
