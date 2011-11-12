@@ -1,6 +1,7 @@
 exports.createStack = function createStack(functions, context) {
     var stack = null;
 
+    // Stack 'em up; starting from the end and moving to the front.
     functions.reverse().forEach(function (fn) {
         var next = stack; // The last continuation funciton will be null
 

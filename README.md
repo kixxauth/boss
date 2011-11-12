@@ -4,8 +4,6 @@ BOSS
 Tell your JavaScript functions when to work.
 --------------------------------------------
 
-Boss is a task queue which runs asynchronous functions in serial or parallel.
-It reports on progress by emitting events, which can be listened for and
-handled by the caller.
+Boss is a task queue which runs asynchronous functions in serial.
 
-This is cool for testing, building, and deployment scripts.
+This is cool for test, build, and deployment scripts as well as simplifying complex serial operations in your JavaScript programs.

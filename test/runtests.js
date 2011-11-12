@@ -4,19 +4,24 @@ var FS = require('fs')
   , AS = require('assert')
 
 
+// Context object which will be global to test scripts
 var context = {};
+context.require = require;
+context.console = console;
+context.process = process;
 
+// Populate the context object with assertion functions
 for (var k in AS) {
     if (AS.hasOwnProperty(k)) {
         context[k] = AS[k];
     }
 }
 
-context.require = require;
-context.console = console;
-context.process = process;
+// Sandbox the context
 context = VM.createContext(context);
 
+// Read each file in the test directory (__diranme) and run it with the
+// sandboxed context created above.
 FS.readdir(__dirname, function (err, files) {
     if (err) throw err;
 
@@ -27,12 +32,13 @@ FS.readdir(__dirname, function (err, files) {
 
         FS.readFile(abspath, 'utf8', function (err, text) {
             if (err) throw err;
-            runFile(file, text);
+            runFile(file, text, context);
         });
     });
 });
 
-function runFile(filename, text) {
+// Run a test file in the specified context
+function runFile(filename, text, context) {
     console.log('running', filename);
 
     try {

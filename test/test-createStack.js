@@ -7,6 +7,7 @@ var tests = [];
 tests.push(function (next) {
     this.count ++;
     next();
+    printTest('Simple Task');
 });
 
 // The next function will not be called until the next tick
@@ -15,12 +16,14 @@ tests.push(function (next) {
     next();
     strictEqual(this.count, 1, 'checking the simple run count');
     this.count ++;
+    printTest('Before Next Tick');
 });
 
 tests.push(function (next) {
     strictEqual(this.count, 2, 'checking the execution order run count');
     this.count ++;
     next();
+    printTest('Next Tick');
 });
 
 // Once a function has resolved (called next()), it cannot resolve again.
@@ -29,12 +32,14 @@ tests.push(function (next) {
     strictEqual(this.count, 3, 'checking the execution order run count');
     this.count ++;
     next();
+    printTest('Idempotent');
 });
 
 tests.push(function (next) {
     strictEqual(this.count, 4, 'checking the execution order run count');
     this.count ++;
     next();
+    printTest('After Idempotent');
 });
 
 // Setup 3 branches:
@@ -76,14 +81,17 @@ tests.push(function (next) {
     BO.createStack(throwErrBranch, this)(function (err) {
         this.count ++;
         strictEqual(err, 'THROWN ERROR', 'thrown error')
+        printTest('Thrown Error');
 
         BO.createStack(syncErrBranch, this)(function (err) {
             this.count ++;
             strictEqual(err, 'SYNC ERROR', 'sync error')
+            printTest('Sync Error');
 
             BO.createStack(asyncErrBranch, this)(function (err) {
                 this.count ++;
                 strictEqual(err, 'ASYNC ERROR', 'async error')
+                printTest('Async Error');
 
                 next();
             });
@@ -98,3 +106,7 @@ stack(function (err) {
     strictEqual(this.count, 8, 'checking the final run count '+ this.count);
     console.log('done OK');
 });
+
+function printTest(testName) {
+    console.log(' - '+ testName);
+}
